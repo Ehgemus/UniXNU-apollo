@@ -45,5 +45,5 @@ wifi/bd_j3s.elf | /vendor/firmware_mnt/image/qca6390/bd_j3s.elf | a0a6d6cfcd86fc
 wifi/board-2.bin | linux-firmware ath11k/QCA6390/hw2.0/board-2.bin | 4aa9f0fe15e9e2b6f9bb13b7187ed8ce035d9d46fb65fac5d5eba2c4e7edc091 | QCA6390 Wi-Fi (hakios.apollo_pcie.c, ath11k)
 wifi/m3.bin | /vendor/firmware_mnt/image/qca6390/m3.bin | b2f804de850865a23905afe1b9b614f42f3af2951c927b8a144aed8e3b9c78ce | QCA6390 Wi-Fi (hakios.apollo_pcie.c, ath11k)
 wifi/regdb.bin | /vendor/firmware_mnt/image/qca6390/regdb.bin | 8a96951dea7a5fef2846a8330e859c471b8a688a358cb2c379853ecec2578419 | QCA6390 Wi-Fi (hakios.apollo_pcie.c, ath11k)
-bluetooth/htbtfw20.tlv | the phone's bluetooth partition (FAT image), as aTechGeekDev/ios-apollo tools/pull-bt-fw.sh | REQUIRED_SHA256 | QCA6390 Bluetooth patch firmware
-bluetooth/htnv20.bin | the phone's bluetooth partition (FAT image), as aTechGeekDev/ios-apollo tools/pull-bt-fw.sh | REQUIRED_SHA256 | QCA6390 Bluetooth NVM
+bluetooth/htbtfw20.tlv | the phone's bluetooth partition, image/htbtfw20.tlv (FAT) | 008e83a926ccf9ddb18d788552cbbf0c107faf9c99d206baa39860fc619d1ea0 | QCA6390 Bluetooth patch firmware
+bluetooth/htnv20.bin | the phone's bluetooth partition, image/htnv20.bin (FAT) | ad759c2a30d2c7e50a52c4423c29b2b29604e9e31cdfeee72781ca9f35bbccc5 | QCA6390 Bluetooth NVM

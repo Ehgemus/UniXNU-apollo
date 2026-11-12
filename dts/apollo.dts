@@ -10,12 +10,13 @@
     model = "Xiaomi Mi 10T (apollo)";
     compatible = "xiaomi,apollo", "qcom,sm8250";
 
-    // DRAM from 0x80000000. 6 GiB is the smallest apollo variant (6 and 8 GiB exist).
-    // REQUIRED: measure on the target phone (the firmware DTB's memory node or
-    // /proc/meminfo under Android) before trusting this for an 8 GiB unit.
+    // DRAM, 8 GiB unit (M2007J3SY), measured 2026-11-12 from the memory node the bootloader
+    // hands to Android (/proc/device-tree/memory/reg): three banks, 0x80000000 + 0x3bb00000,
+    // 0xc0000000 + 0xc0000000 and 0x180000000 + 0x100000000. One contiguous range here; the
+    // hole between the first two banks is reserved below. A 6 GiB unit needs its own values.
     memory@80000000 {
         device_type = "memory";
-        reg = <0 0x80000000 1 0x80000000>;
+        reg = <0 0x80000000 2 0x00000000>;
     };
 
     reserved-memory {
@@ -23,6 +24,8 @@
         #size-cells = <2>;
         ranges;
 
+        // Not DRAM: the gap between the bootloader's first and second banks.
+        dram_hole: dram-hole@bbb00000 { reg = <0 0xbbb00000 0 0x4500000>; no-map; };
         hyp_mem: hyp@80000000 { reg = <0 0x80000000 0 0x600000>; no-map; };
         cmd_db: reserved-memory@80860000 { reg = <0 0x80860000 0 0x20000>; no-map; };
         smem_mem: smem@80900000 { reg = <0 0x80900000 0 0x200000>; no-map; };

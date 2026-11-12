@@ -36,7 +36,7 @@ volume = "APOLLO"
 size_mib = 192
 loader = "firmware"
 title = "iOS 16.5"
-dram_size = "0x180000000"
+dram_size = "0x200000000"
 timeout = 3
 # HakiOS's driver arguments (apollo_touch=1 apollo_buttons=1 apollo_battery=1 apollo_cpufreq=1
 # apollo_audio=5 apollo_mic=4 apollo_gpu=21 apollo_display=1 apollo_haptic=5 apollo_wifi=5 ...)
@@ -54,9 +54,14 @@ artwork-display-gamut = "sRGB"
 [adt.product.u32]
 oled-display = 0
 
-# [userdata] first_lba / last_lba: REQUIRED. HakiOS carves a Darwin partition from userdata
-# (scripts/gpt-carve-darwin.py: entry 34 of LUN 0, sda35 under Android). Record its LBAs and
-# lba_bytes = 4096 here after following https://unixnu.com/porting/dual-system-partition.
+# The Darwin partition HakiOS carved after userdata (scripts/gpt-carve-darwin.py): LUN 0
+# entry 35, GPT name "darwin", 20 GiB. Measured 2026-11-12 from /sys/class/block/sda35
+# (start 205535232, size 41945048 in 512-byte units). UniXNU's own procedure names this
+# partition "unixnu" (https://unixnu.com/porting/dual-system-partition).
+[userdata]
+first_lba = 25691904
+last_lba = 30935034
+lba_bytes = 4096
 
 [package]
 unixnu = "../UniXNU"

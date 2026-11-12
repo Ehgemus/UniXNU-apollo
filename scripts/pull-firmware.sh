@@ -70,4 +70,16 @@ LF=https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/p
 [ -f .cache/firmware/wifi/board-2.bin ] || curl -sfL -o .cache/firmware/wifi/board-2.bin "$LF/board-2.bin" ||
 	echo "pull-firmware.sh: board-2.bin: not fetched from linux-firmware"
 echo "pull-firmware.sh: .cache/firmware/wifi: $(ls -1 .cache/firmware/wifi | wc -l | tr -d ' ') files"
+# Bluetooth: the QCA6390's patch and NVM files live in the bluetooth partition, a FAT image (host needs mtools)
+bt=$(adb shell 'readlink -f /dev/block/by-name/bluetooth' 2>/dev/null | tr -d '\r')
+if [ -n "$bt" ] && command -v mcopy >/dev/null; then
+	mkdir -p .cache/firmware/bluetooth
+	img=$(mktemp)
+	adb exec-out "dd if=$bt bs=1048576 2>/dev/null" > "$img" &&
+		mcopy -n -o -i "$img" ::/image/htbtfw20.tlv ::/image/htnv20.bin .cache/firmware/bluetooth/ ||
+		echo "pull-firmware.sh: bluetooth: htbtfw20.tlv/htnv20.bin not read"
+	rm -f "$img"
+else
+	echo "pull-firmware.sh: bluetooth: no bluetooth partition or no mtools (mcopy)"
+fi
 echo "pull-firmware.sh: done; the Wi-Fi also wants .cache/firmware/wifi/network (the network's name and passphrase, two lines)"
