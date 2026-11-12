@@ -134,7 +134,7 @@ button-priority_voldown = 2
 opposed-power-vol-buttons = 1
 
 [adt.defaults.u32]
-kern.maxvnodes = 10000
+"kern.maxvnodes" = 10000
 
 [userdata]
 windows = [{ name = "OS", component = "OS" }, { name = "SystemOS", component = "Cryptex1,SystemOS", optional = true }]

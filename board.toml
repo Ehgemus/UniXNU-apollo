@@ -62,6 +62,8 @@ timeout = 3
 kernel_args = ["-v"]
 
 [payload.adt]
+# Qualcomm SoC ID of SM8250 (356), read from /sys/devices/soc0/soc_id on the phone (revision 2.1).
+chip_id = "164"
 unique_chip_id = "required"
 
 # Board ADT overrides of the OS profile: the panel is an sRGB LCD, and iOS draws black
