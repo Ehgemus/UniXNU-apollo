@@ -122,14 +122,14 @@ evidence = []
 id = "network"
 status = "planned"
 components = []
-paths = ["package/ath11k-lx/**", "scripts/mk-ath11k.sh", "package/*Wifi*"]
-inputs = ["QCA6390 on PCIe0; amss.bin (WLAN.HST.1.0.1.r1-01134), m3.bin, bd_j3s.elf, regdb.bin, board-2.bin."]
+paths = ["package/ath11k-lx/**", "scripts/mk-ath11k.sh", "package/*Wifi*", "package/*Bluetooth*"]
+inputs = ["QCA6390 on PCIe0; amss.bin (WLAN.HST.1.0.1.r1-01134), m3.bin, bd_j3s.elf, regdb.bin, board-2.bin.", "QCA6390 Bluetooth on QUPv3 SE6 UART (0x998000, GPIO 16-19), BT_EN GPIO 21, SW_CTRL GPIO 124, rails shared with Wi-Fi; htbtfw20.tlv and htnv20.bin from the bluetooth partition."]
 configuration = ["Linux ath11k built by scripts/mk-ath11k.sh over HakiOS's lx layer with package/ath11k-lx."]
 procedure = ["HAKIOS=../hakios-new scripts/mk-ath11k.sh; boot with apollo_wifi=5 wifi_station=1."]
-findings = ["HakiOS lists and joins Wi-Fi networks from Settings on apollo."]
+findings = ["HakiOS lists and joins Wi-Fi networks from Settings on apollo.", "aTechGeekDev/ios-apollo (MIT) runs Bluetooth on apollo under iOS 16.7.16: on/off, scan, pairing kept across reboots, A2DP, HFP and AVRCP. Kernel: xnu 0136/0137/0141-0143/0145 (UART at 921600, HCI H4 endpoint, answers to bluetoothd's Broadcom vendor commands and 0x204a to keep legacy LE). Userland: libsweet-bt replaces BlueTool and sets bluetoothd's H4 transport.", "UniXNU's QcaBluetooth does the same btqca bring-up over GENI UART but is verified only on WCN7850 with iPadOS 27's bluetoothd."]
 completion = ["Scanning, association, address configuration and sustained receive/transmit traffic pass with the selected firmware."]
 limits = ["Ath12kWifi does not cover the QCA6390; the build still needs a HakiOS checkout for its shared lx layer."]
-next_action = ["Make an Ath11kWifi component from the lx layer and package/ath11k-lx."]
+next_action = ["Make an Ath11kWifi component from the lx layer and package/ath11k-lx.", "Bluetooth: extend QcaBluetooth to the QCA6390 with the apollo inputs above, and carry the iOS 16 bluetoothd shims from ios-apollo as a board service; pull and hash the two firmware files."]
 evidence = []
 
 [[area]]

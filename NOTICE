@@ -12,6 +12,10 @@ Licenses, by directory:
 - package/ and scripts/ other than the files named above: from HakiOS, MIT License,
   "Copyright (c) 2025-2026 the HakiOS authors", see package/LICENSE.MIT.
 
+Bluetooth inputs (wiring, firmware files, UART rates, iOS 16 bluetoothd behaviour) come from
+aTechGeekDev/ios-apollo (https://github.com/aTechGeekDev/ios-apollo), MIT License,
+"Copyright (c) 2026 Leo Malik, Copyright (c) 2026 dipa-studio", used with the author's permission.
+
 HakiOS: https://github.com/oosexgang/hackios-xnu-kernel. The history of devices/mi-10t is kept
 in this repository's git log.
 

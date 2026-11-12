@@ -53,6 +53,9 @@
 //   QUPv3 SE4 (SPI, 0x990000): Novatek NT36675 touch ("j3s").
 //   QUPv3 SE11 (I2C, 0xa8c000): Awinic AW8697 haptics at 0x5a.
 //   PCIe0: QCA6390 Wi-Fi (17cb:1101).
+//   QUPv3 SE6 (UART, 0x998000, GPIO 16-19 CTS/RTS/TX/RX): QCA6390 Bluetooth; BT_EN GPIO 21,
+//         SW_CTRL GPIO 124; 115200 baud for the ROM, then 921600 (aTechGeekDev/ios-apollo
+//         xnu 0136/0145, verified there with A2DP, HFP and AVRCP).
 //   SPMI: PM8150 power-on (power, volume down), GPIO6 (volume up); PM8150B fuel gauge;
 //         PM8150L WLED backlight (0xd800/0xd900).
 //   DSI0 / INTF_1: video-mode DSC panel mdss_dsi_j3s_37_02_0a_dsc_video.

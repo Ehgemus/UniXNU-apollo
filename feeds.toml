@@ -3,7 +3,7 @@
 name = "sm8250"
 kind = "soc"
 git = "https://github.com/Pistachio-Project/UniXNU-sm8250-common"
-commit = "90fa1fddd211339d03b15411ee52ad8e6ad607f0"
+commit = "13f1d8739a742ebe93e7847b8547ab99bcde5b34"
 
 # The iOS 16.5 kernel source (OS profile os-profiles/ios-16.5-20F66).
 [[source]]
