@@ -1,0 +1,5 @@
+# iOS 16.5 (xnu-8796.121.2) OS patches, one per line in application order.
+#
+# Empty in this revision. UniXNU's arch series and XnuPrelink's security-init and
+# sparse-index patches are written for xnu-10063; their xnu-8796 versions go here once
+# rebased and checked (porting.toml, area "packaging").

@@ -1,0 +1,143 @@
+# iOS 16.5 (20F66) OS profile for UniXNU, iPhone X (iPhone10,3 / D22AP) identity.
+#
+# UniXNU reads OS profiles only from its own profiles/os/. This copy lives in the device
+# repository until it is contributed upstream; scripts/install-os-profile.sh links it into
+# the UniXNU checkout (the package workflow runs it before resolving).
+#
+# Kernel: xnu-8796.121.2, the release HakiOS has run iOS 16.5 on since its first boot.
+# IPSW facts: Apple's iPhone10,3,iPhone10,6_16.5_20F66_Restore.ipsw. The OS cryptex hash was
+# measured locally (HakiOS sysimage/cryptex-os.dmg) and agrees with the value published by
+# UniXNU-nio's ios-16.5-20F66 profile, which also supplied the kernelcache pin and the prelink
+# roots below.
+
+[os]
+name = "ios-16.5-20F66"
+darwin = "22.5.0"
+xnu_version = "8796.121.2"
+xnu_revision = "c54f35ca767986246321eb901baf8f5ff7923f6a"
+driverkit_tag = "xnu-8796.121.2"
+trustcache_tag = "xnu-8796.101.5"
+abi = ["IOGPUFamily", "IOHIDFamily-2031.120.4", "IOMobileGraphicsFamily"]
+
+[ipsw]
+url = "https://updates.cdn-apple.com/2023SpringFCS/fullrestores/032-85130/6AB0D10A-8AF9-4F6C-8CF5-A1B315CABE88/iPhone10,3,iPhone10,6_16.5_20F66_Restore.ipsw"
+product = "iPhone10,3"
+version = "16.5"
+build = "20F66"
+device_class = "d22ap"
+chip_id = 32789
+board_id = 6
+fetch = ["KernelCache", "DeviceTree", "StaticTrustCache", "Cryptex1,SystemTrustCache"]
+
+[ipsw.sha256]
+"096-04088-077.dmg" = "64354ba3475d3c34d6fc531f75585a7b24af0fdb7a3a8a2bdf95c7f351a3f290"
+"096-04666-078.dmg" = "2279bf443856fcb6a3f00b1fa06a32ba02a66fdf6ab6b12019462c7498aafdd3"
+
+[kernel.prelink]
+tool = "kits/XnuPrelink/emit_prelink.py"
+# xnu-8796 links no .noctf variant; the raw linked kernel carries no CTF section.
+kernel = "build/xnu/ios-obj/DEVELOPMENT_ARM64_BCM2837/mach.development.bcm2837.unstripped"
+# The decompressed arm64 kernelcache Mach-O slice.
+kernelcache_sha256 = "e6fa75598f47b5a9460a60913e2ac8e4cd6cd60eb475bb31da65b68ffbcfdad5"
+slide = "-0x1000000"
+# early_security_init: not measured for this kernelcache; emit_prelink skips the hook.
+roots = [
+  "com.apple.AppleFSCompression.AppleFSCompressionTypeZlib",
+  "com.apple.driver.AppleARMPlatform",
+  "com.apple.driver.AppleARMWatchdogTimer",
+  "com.apple.driver.AppleAudioClockLibs",
+  "com.apple.driver.AppleEffaceableStorage",
+  "com.apple.driver.AppleIISController",
+  "com.apple.driver.AppleM2ScalerCSCDriver",
+  "com.apple.driver.AppleMobileFileIntegrity",
+  "com.apple.driver.ApplePMGR",
+  "com.apple.driver.IODARTFamily",
+  "com.apple.filesystems.apfs",
+  "com.apple.iokit.CoreAnalyticsFamily",
+  "com.apple.iokit.IOAVFamily",
+  "com.apple.iokit.IOAudio2Family",
+  "com.apple.iokit.IOCECFamily",
+  "com.apple.iokit.IOCryptoAcceleratorFamily",
+  "com.apple.iokit.IOGPUFamily",
+  "com.apple.iokit.IOHDCPFamily",
+  "com.apple.iokit.IOHIDFamily",
+  "com.apple.iokit.IOMobileGraphicsFamily",
+  "com.apple.iokit.IOReportFamily",
+  "com.apple.iokit.IOSlowAdaptiveClockingFamily",
+  "com.apple.iokit.IOStorageFamily",
+  "com.apple.iokit.IOSurface",
+  "com.apple.kec.Libm",
+  "com.apple.kec.corecrypto",
+  "com.apple.kext.AppleMatch",
+  "com.apple.kext.CoreTrust",
+  "com.apple.security.AppleImage4",
+  "com.apple.security.sandbox",
+]
+
+[payload]
+text_fixups = []
+trust_cache_sha256 = [
+  "df0f60fd05b7c312ad0fddb5c85d8adf97b487e8500518337bc4cbde3ca73ea7",
+  "501fa23c4620e68e48b91bd2ba8d74251d4fbe37147290650cf717bbef619616",
+]
+
+# Identity: the same iPhone X that HakiOS's loader presents by default (xnuloader identity.h).
+[adt.root.string]
+model = "iPhone10,3"
+target-type = "D22"
+compatible = "D22AP"
+
+[adt.chosen.string]
+osenvironment = "main"
+crypto-hash-method = "sha2-384"
+
+[adt.chosen.u32]
+certificate-production-status = 0
+effective-production-status-ap = 0
+certificate-security-mode = 1
+effective-security-mode-sep = 1
+amfi-only-platform-code = 1
+
+[adt.product.string]
+product-name = "iPhone X"
+product-description = "iPhone X"
+artwork-device-idiom = "phone"
+# HakiOS shows that iOS renders black with "P3" on these sRGB panels (xnuloader gamut_p3);
+# the board overrides this when its panel is sRGB.
+artwork-display-gamut = "P3"
+compatible-device-fallback = "iPhone9,2"
+graphics-featureset-class = "APPLE4"
+graphics-featureset-fallbacks = "APPLE3:APPLE3v1:APPLE2:APPLE1:GLES2,0"
+
+[adt.product.u32]
+artwork-device-subtype = 2436
+artwork-scale-factor = 3
+device-perf-memory-class = 4
+oled-display = 1
+thin-bezel = 1
+
+[adt.product.bytes]
+product-id = "fd079b298144a7deb4d7c87fef3eb474d8f0e7eb"
+
+[adt.buttons.string]
+compatible = "buttons"
+device_type = "buttons"
+
+[adt.buttons.strings]
+button-names = ["volup", "voldown", "hold", "ringerab"]
+
+[adt.buttons.u32]
+home-button-type = 2
+button-priority_hold = 1
+button-priority_volup = 2
+button-priority_voldown = 2
+opposed-power-vol-buttons = 1
+
+[adt.defaults.u32]
+kern.maxvnodes = 10000
+
+[userdata]
+windows = [{ name = "OS", component = "OS" }, { name = "SystemOS", component = "Cryptex1,SystemOS", optional = true }]
+
+# [root] os_volume_uuid: REQUIRED. The APFS volume UUID inside 096-04088-077.dmg; read it with
+# `apfs-fuse`/`7z l -slt` on that image and record it here before the first payload build.

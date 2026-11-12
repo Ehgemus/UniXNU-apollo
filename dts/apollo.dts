@@ -1,0 +1,58 @@
+/dts-v1/;
+/include/ "sm8250.dtsi"
+
+// Xiaomi Mi 10T / Mi 10T Pro / Redmi K30S Ultra (apollo), SM8250.
+// Sources: the phone's own XBL memory map as used by uefi-apollo
+// (Platforms/Xiaomi/apolloPkg/Library/MemoryMapLib/MemoryMapLib.c) and the HakiOS
+// loader and drivers that run iOS 16.5 on this phone.
+
+/ {
+    model = "Xiaomi Mi 10T (apollo)";
+    compatible = "xiaomi,apollo", "qcom,sm8250";
+
+    // DRAM from 0x80000000. 6 GiB is the smallest apollo variant (6 and 8 GiB exist).
+    // REQUIRED: measure on the target phone (the firmware DTB's memory node or
+    // /proc/meminfo under Android) before trusting this for an 8 GiB unit.
+    memory@80000000 {
+        device_type = "memory";
+        reg = <0 0x80000000 1 0x80000000>;
+    };
+
+    reserved-memory {
+        #address-cells = <2>;
+        #size-cells = <2>;
+        ranges;
+
+        hyp_mem: hyp@80000000 { reg = <0 0x80000000 0 0x600000>; no-map; };
+        cmd_db: reserved-memory@80860000 { reg = <0 0x80860000 0 0x20000>; no-map; };
+        smem_mem: smem@80900000 { reg = <0 0x80900000 0 0x200000>; no-map; };
+        tz_apps: tz-apps@82400000 { reg = <0 0x82400000 0 0x3a00000>; no-map; };
+        // PIL images (ADSP at 0x8bb00000, 37 MiB, among them: hakios.apollo_adsp.c).
+        pil_mem: pil@86000000 { reg = <0 0x86000000 0 0xd200000>; no-map; };
+        // The panel's framebuffer, left running by the firmware: 1080x2400.
+        splash_region: splash_region@9c000000 {
+            reg = <0 0x9c000000 0 0x2400000>;
+            label = "cont_splash_region";
+        };
+    };
+};
+
+// All eight cores; cluster types come from the SoC DTSI.
+&cpu0 { status = "okay"; };
+&cpu1 { status = "okay"; };
+&cpu2 { status = "okay"; };
+&cpu3 { status = "okay"; };
+&cpu4 { status = "okay"; };
+&cpu5 { status = "okay"; };
+&cpu6 { status = "okay"; };
+&cpu7 { status = "okay"; };
+
+// Board wiring known from HakiOS, recorded here for the drivers that will read it.
+// They stay disabled until those drivers read the ADT instead of fixed addresses.
+//   QUPv3 SE3 (I2C, 0x98c000): CS35L41 speaker 0x40, earpiece 0x42; reset GPIO 114.
+//   QUPv3 SE4 (SPI, 0x990000): Novatek NT36675 touch ("j3s").
+//   QUPv3 SE11 (I2C, 0xa8c000): Awinic AW8697 haptics at 0x5a.
+//   PCIe0: QCA6390 Wi-Fi (17cb:1101).
+//   SPMI: PM8150 power-on (power, volume down), GPIO6 (volume up); PM8150B fuel gauge;
+//         PM8150L WLED backlight (0xd800/0xd900).
+//   DSI0 / INTF_1: video-mode DSC panel mdss_dsi_j3s_37_02_0a_dsc_video.

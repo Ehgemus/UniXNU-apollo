@@ -11,13 +11,14 @@
 # What comes out, in xnu-deps/build/ath11k-apollo:
 #   out/ath11k-apollo.o    the object for the kernel (xnu-build.sh links it when it is there)
 #   out/stubs.txt          what of the driver is not built (as for the POCO)
-# usage: devices/mi-10t/tools/mk-ath11k.sh
+# usage: HAKIOS=../hakios-new scripts/mk-ath11k.sh   (HAKIOS: a HakiOS checkout, for its shared wifi/lx layer and tools)
 set -e
-ROOT=$(cd "$(dirname "$(readlink -f "$0")")/../../.." && pwd)
+DEV=$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)
+ROOT=$(cd "${HAKIOS:?set HAKIOS to a HakiOS checkout}" && pwd)
 B=$ROOT/xnu-deps/build/ath11k
 A=$ROOT/xnu-deps/build/ath11k-apollo
 W=$ROOT/wifi/lx
-WA=$ROOT/devices/mi-10t/wifi/lx            # this phone's own: the PCIe bus, the name prefix, the QMI patches
+WA=$DEV/package/ath11k-lx            # this phone's own: the PCIe bus, the name prefix, the QMI patches
 if [ ! -f "$B/src/.release" ] || [ ! -f "$B/freebsd/.release" ] || [ ! -d "$B/gen" ]; then
 	"$ROOT/tools/mk-ath11k.sh" || true
 fi

@@ -1,0 +1,13 @@
+# Board patch paths, one per line in application order, relative to this directory.
+#
+# Carried from HakiOS, not yet applied (porting.toml, area "packaging"):
+#   0001-apollo-drivers.patch  the Mi 10T drivers as new files (touch, display, backlight, GPU,
+#                              audio DSP, amplifiers, microphones, haptics, Wi-Fi PCIe/QRTR/ath11k
+#                              glue, battery, buttons, cpufreq, frame and hitch tracers)
+#   0002-apollo-hooks.patch    their build entries and bsd_init/framebuffer hooks
+# Both are against xnu-8796.121.2 *with HakiOS's core patch (xnu/hakios.patch) applied*: the
+# drivers use its shared layers (input, QMI, lx, audio plug-in). They become active once that
+# core layer is split into arch/OS/SoC patches or components; until then the kernel builds
+# without them.
+# 0001-apollo-drivers.patch
+# 0002-apollo-hooks.patch
