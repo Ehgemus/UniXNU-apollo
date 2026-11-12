@@ -14,7 +14,8 @@ include = ["ArmDTPlatform", "ArmCpu", "SoftwareAES", "XnuPrelink", "DarwinBoot",
 [kernel]
 defconfig = "apollo_defconfig"
 config_fragments = ["arch:configs/common.config", "soc:configs/sm8250.config", "os:configs/ios.config"]
-patch_series = ["arch:patches/xnu/series", "soc:patches/xnu/series", "os:patches/xnu/series", "device:patches/xnu/series"]
+# The ARM64 series targets xnu-10063; the iOS 16.5 OS series carries its xnu-8796 equivalent.
+patch_series = ["soc:patches/xnu/series", "os:patches/xnu/series", "device:patches/xnu/series"]
 
 [device_tree]
 source = "device:dts/apollo.dts"
