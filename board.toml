@@ -23,13 +23,31 @@ include_dirs = ["soc:dts"]
 [firmware]
 # The firmware checkout is Pistachio-Project/uefi-apollo (Mu-Silicium with apolloPkg).
 # FD: 0x9FC00000, 0x300000 bytes, XBL's UEFI window (uefiplatLA.cfg).
+# Values from uefi-apollo bc8f586 (builds RELEASE and DEBUG to a 0x300000-byte FD).
 config = "apollo"
 dsc = "Platforms/Xiaomi/apolloPkg/apollo.dsc"
 fd = "Build/apolloPkg/{target}_CLANGPDB/FV/SILICIUM_UEFI.fd"
-packages = ["{uefi}", "{tree}/package", "{tree}/drivers/DarwinBoot", "{edk2}"]
+packages = ["{uefi}", "{uefi}/Platforms/Xiaomi", "{tree}/package", "{tree}/drivers/DarwinBoot", "{edk2}", "{uefi}/Common/Mu", "{uefi}/Common/Mu_OEM_Sample", "{uefi}/Silicon/Qualcomm", "{uefi}/Silicon/Silicium", "{uefi}/Silicium-ACPI", "{uefi}/Silicium-ACPI/Platforms/Xiaomi", "{uefi}/Silicium-ACPI/Silicon/Qualcomm"]
+# Binaries is Pistachio-Project/Device-Binaries, which holds apollo's XBL drivers.
+submodules = ["Binaries", "Common/Mu", "Common/Mu_OEM_Sample", "Silicium-ACPI", "Silicon/Silicium/OpensslPkg/Library/OpensslLib/openssl"]
+# The five base patches build_uefi.py always applies, plus sheng's GIC spurious-interrupt fix.
+patches = ["Resources/MuPatches/AsmMacroLib.patch", "Resources/MuPatches/Auth-Service.patch", "Resources/MuPatches/Boot-Manager.patch", "Resources/MuPatches/Timer.patch", "Resources/MuPatches/Usb-Bus.patch", "Resources/MuPatches/Gic-Spurious.patch"]
 
 [firmware.defines]
-DEVICE_MODEL = "apollo"
+ENABLE_SECUREBOOT = "0"
+DEVICE_MODEL = "0"
+MEMORY_PROTECTION = "TRUE"
+SHIP_MODE = "FALSE"
+BUILDID_STRING = "apollo-unixnu"
+
+[bootimg]
+# The phone's own Android device tree, as HakiOS booted with (uefi-apollo Resources/DTBs).
+# Pass it with --dtb ../uefi-apollo/Resources/DTBs/apollo.dtb.
+
+[bootimg.image]
+header_version = 1
+pagesize = 4096
+kernel_compression = "gzip"
 
 [payload]
 volume = "APOLLO"

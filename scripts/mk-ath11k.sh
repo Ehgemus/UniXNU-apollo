@@ -11,7 +11,8 @@
 # What comes out, in xnu-deps/build/ath11k-apollo:
 #   out/ath11k-apollo.o    the object for the kernel (xnu-build.sh links it when it is there)
 #   out/stubs.txt          what of the driver is not built (as for the POCO)
-# usage: HAKIOS=../hakios-new scripts/mk-ath11k.sh   (HAKIOS: a HakiOS checkout, for its shared wifi/lx layer and tools)
+# usage: HAKIOS=/path/to/hakios-apollo scripts/mk-ath11k.sh   (HAKIOS: a clone of the archived
+#   https://github.com/enesuzun2002/hakios-apollo, branch apollo, for its shared wifi/lx layer and tools)
 set -e
 DEV=$(cd "$(dirname "$(readlink -f "$0")")/.." && pwd)
 ROOT=$(cd "${HAKIOS:?set HAKIOS to a HakiOS checkout}" && pwd)

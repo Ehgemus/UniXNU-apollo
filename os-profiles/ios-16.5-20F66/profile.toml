@@ -139,5 +139,7 @@ kern.maxvnodes = 10000
 [userdata]
 windows = [{ name = "OS", component = "OS" }, { name = "SystemOS", component = "Cryptex1,SystemOS", optional = true }]
 
-# [root] os_volume_uuid: REQUIRED. The APFS volume UUID inside 096-04088-077.dmg; read it with
-# `apfs-fuse`/`7z l -slt` on that image and record it here before the first payload build.
+[root]
+# The APFS volume of 096-04088-077.dmg ("SydneyF20F66.D22D221OS"), read with 7z l -slt on the
+# pinned image (sha256 64354ba3...).
+os_volume_uuid = "97A3EB1A-5218-4936-BC85-9574EC2C8CC9"
