@@ -22,17 +22,19 @@ evidence = []
 
 [[area]]
 id = "firmware"
-status = "planned"
+status = "implemented"
 components = ["DarwinBoot"]
 paths = ["proprietary-files.txt", "scripts/pull-firmware.sh"]
 inputs = ["Pistachio-Project/uefi-apollo: Mu-Silicium apolloPkg from HakiOS (KonaPkg, XBL BOOT.XF.3.2-00304-SM8250-2 drivers).", "The phone's firmware, pulled by scripts/pull-firmware.sh into .cache/firmware (42 files in proprietary-files.txt)."]
 configuration = ["[firmware] config apollo, apollo.dsc, FD at 0x9FC00000 size 0x300000."]
 procedure = ["scripts/pull-firmware.sh with the phone in LineageOS, rooted adb; ./unixnu firmware -D ../UniXNU-apollo --uefi ../uefi-apollo."]
-findings = ["Under HakiOS the same apolloPkg boots via fastboot boot and hands off to HakiOS's own XNU loader; UniXNU replaces that loader with UniXNU.efi and DarwinBoot.", "uefi-apollo needed sheng's SEC device-tree handoff (entry-argument HOB) and BootShim for UniXNURamDiskDxe and bootimg.py; DiskIo/Partition now come from MdeModulePkg instead of the XBL binaries."]
+findings = ["On the phone (2026-11-12, fastboot boot from RAM): the RELEASE firmware reaches the UniXNU menu. Bisected on hardware: with the MdeModulePkg DiskIoDxe/PartitionDxe the firmware hangs on a blank screen, with the phone's prebuilt pair it reaches the menu (uefi-apollo ab70992).", "UniXNU's default boot image header (base 0, 4096-byte pages, tags at 0x1e00000) makes apollo's ABL boot Android instead; Mu-Silicium's mkbootimg values in [bootimg.image] work. A firmware-only image also needs a non-empty ramdisk (uefi-apollo Resources/ramdisk).", "A DEBUG build stops on ASSERT_EFI_ERROR (Out of Resources) in a prebuilt Qualcomm driver's uncached allocation; seen with the MdeModulePkg disk drivers, not retested with the prebuilt pair.", "Under HakiOS the same apolloPkg boots via fastboot boot and hands off to HakiOS's own XNU loader; UniXNU replaces that loader with UniXNU.efi and DarwinBoot.", "uefi-apollo needed sheng's SEC device-tree handoff (entry-argument HOB) and BootShim for UniXNURamDiskDxe and bootimg.py; DiskIo/Partition now come from MdeModulePkg instead of the XBL binaries."]
 completion = ["Firmware image builds, enters the UniXNU menu, publishes the framebuffer and preserves the documented memory reservations."]
-limits = ["uefi-apollo bc8f586 builds (RELEASE and DEBUG, 0x300000-byte FD) but has not been booted. The payload must stay inside ABL's reserved Kernel window at 0xA0000000 (256 MiB); check the UNIXNURAMDISK initrd address on first boot."]
-next_action = ["Build uefi-apollo with UniXNU's packages and reach the UniXNU menu on the phone."]
-evidence = []
+limits = ["Only the firmware is verified: no payload, DarwinBoot handoff or XNU yet.", "uefi-apollo bc8f586 builds (RELEASE and DEBUG, 0x300000-byte FD) but has not been booted. The payload must stay inside ABL's reserved Kernel window at 0xA0000000 (256 MiB); check the UNIXNURAMDISK initrd address on first boot."]
+next_action = ["Retest the DEBUG build with the prebuilt disk drivers, then boot a payload through DarwinBoot once the kernel builds."]
+evidence = [
+  { kind = "device", command = "./unixnu firmware --target RELEASE; ./unixnu bootimg --ramdisk ../uefi-apollo/Resources/ramdisk; fastboot boot", revision = "ab70992cdf353d7531df77649740bcce405365f4", reference = "https://github.com/Pistachio-Project/uefi-apollo/commit/ab70992cdf353d7531df77649740bcce405365f4", result = "Xiaomi Mi 10T M2007J3SY, LineageOS ABL: the UniXNU menu appears (no boot entries, no payload)." },
+]
 
 [[area]]
 id = "cpu"

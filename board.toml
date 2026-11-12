@@ -44,9 +44,16 @@ BUILDID_STRING = "apollo-unixnu"
 # The phone's own Android device tree, as HakiOS booted with (uefi-apollo Resources/DTBs).
 # Pass it with --dtb ../uefi-apollo/Resources/DTBs/apollo.dtb.
 
+# Mu-Silicium's own boot image values (stock mkbootimg defaults). With UniXNU's defaults (base 0,
+# 4096-byte pages, tags at 0x1e00000) apollo's ABL accepted the image and booted Android instead,
+# without the firmware printing anything (2026-11-12).
 [bootimg.image]
 header_version = 1
-pagesize = 4096
+base = 0x10000000
+kernel_offset = 0x8000
+ramdisk_offset = 0x01000000
+tags_offset = 0x100
+pagesize = 2048
 kernel_compression = "gzip"
 
 [payload]
