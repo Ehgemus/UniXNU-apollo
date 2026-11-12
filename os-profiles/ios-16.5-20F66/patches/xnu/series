@@ -61,6 +61,21 @@ arch:../../../patches/xnu/zzwb-native-sandbox-grant-set-properties.patch
 # zzyb-native-cryptex-os-view: iPadOS 17 owner/addon/cryptex feature, not ported yet
 arch:../../../patches/xnu/zzyc-owner-skip-launch-constraints.patch
 
+# Newer clang (UniXNU's toolchain) removed the flag that acknowledged -ftrivial-auto-var-init=zero; xnu-8796 still passes it.
+../xnu-8796/clang-drop-auto-var-init-acknowledgement.patch
+# Newer clang rejects arrays of the over-aligned uio_stackbuf_t; backport later xnu's UIO_STACKBUF().
+../xnu-8796/clang-uio-stackbuf.patch
+# The toolchain's iig generates DriverKit glue that reads IORPC.kernelContent (later xnu); backport the field.
+../xnu-8796/iorpc-kernel-content.patch
+# Current clang rejects __typeof__(*(void *)) in C++; backport xnu-10063's os_get_pointee_type() for kalloc type checks.
+../xnu-8796/kalloc-pointee-type.patch
+# The xnu-8796 source release omits osfmk/arm64/kpc.c; xnu-10063's file, whose non-Apple branch stubs the PMU backend.
+../xnu-8796/arm64-kpc-from-xnu-10063.patch
+# UniXNU's archive builders read per-object compile records (clang -MJ), which xnu-10063's MakeInc.rule writes.
+../xnu-8796/compile-records.patch
+# UniXNU's libpthread (519.120.4) calls proc_get_jit_entitled; backport that pthread callback from xnu-10063.
+../xnu-8796/pthread-jit-entitled-callback.patch
+
 # XnuPrelink: the early security hook and sparse kext index (apply to xnu-8796 unchanged).
 component:XnuPrelink/patches/xnu-10063.141.1-security-init.patch
 component:XnuPrelink/patches/xnu-10063.141.1-sparse-index.patch
