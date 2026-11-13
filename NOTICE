@@ -3,13 +3,13 @@ UniXNU-apollo
 Licenses, by directory:
 
 - Files written for this repository (board.toml, porting.toml, dts/, configs/, os-profiles/,
-  scripts/install-os-profile.sh, documentation): BSD-2-Clause-Patent, see LICENSE.
+  scripts/install-os-profile.sh, package/prelink/, documentation): BSD-2-Clause-Patent, see LICENSE.
 - scripts/package.sh and .github/workflows/: copied from UniXNU's device template
   (BSD-2-Clause-Patent, UniXNU contributors).
 - patches/xnu/0001-apollo-drivers.patch and 0002-apollo-hooks.patch: from HakiOS
   (devices/mi-10t/xnu). They are a derivative work of Apple's XNU and of HakiOS's own XNU
   drivers, licensed under the Apple Public Source License 2.0, see patches/xnu/LICENSE.APSL.
-- package/ and scripts/ other than the files named above: from HakiOS, MIT License,
+- package/ (except package/prelink/) and scripts/ other than the files named above: from HakiOS, MIT License,
   "Copyright (c) 2025-2026 the HakiOS authors", see package/LICENSE.MIT.
 
 Bluetooth inputs (wiring, firmware files, UART rates, iOS 16 bluetoothd behaviour) come from

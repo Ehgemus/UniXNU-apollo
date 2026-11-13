@@ -34,7 +34,8 @@ fetch = ["KernelCache", "DeviceTree", "StaticTrustCache", "Cryptex1,SystemTrustC
 "096-04666-078.dmg" = "2279bf443856fcb6a3f00b1fa06a32ba02a66fdf6ab6b12019462c7498aafdd3"
 
 [kernel.prelink]
-tool = "kits/XnuPrelink/emit_prelink.py"
+# emit_prelink plus the iOS 16.5 Libm constant block (package/prelink, porting.toml packaging).
+tool = "kits/apollo/prelink/emit_prelink_ios16_5.py"
 # xnu-8796 links no .noctf variant; the raw linked kernel carries no CTF section.
 kernel = "build/xnu/ios-obj/DEVELOPMENT_ARM64_BCM2837/mach.development.bcm2837.unstripped"
 # The decompressed arm64 kernelcache Mach-O slice.
