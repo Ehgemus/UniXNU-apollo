@@ -72,7 +72,9 @@ kernel_compression = "gzip"
 
 [payload]
 volume = "APOLLO"
-size_mib = 192
+# 64 MiB: the kernel (55.6 MB), trust cache and ADT fit; apollo's ABL stalled receiving a 194 MiB
+# boot image over fastboot (2026-11-13). Raise it when a Data seed joins the payload.
+size_mib = 64
 loader = "firmware"
 title = "iOS 16.5"
 dram_size = "0x200000000"
@@ -81,6 +83,11 @@ timeout = 3
 # apollo_audio=5 apollo_mic=4 apollo_gpu=21 apollo_display=1 apollo_haptic=5 apollo_wifi=5 ...)
 # join this list when patches/xnu/0001-0002 are applied.
 kernel_args = ["-v"]
+# Entry probe (docs guide/debugging#green-bar), apollo 2026-11-13: resets seen after MMU enable, arm_vm_init,
+# serial_init, kernel_startup_initialize_upto, (with CONFIG_XNU_DT_PANIC_REGION) PE_create_console, PE_init_printf, ml_map_cpu_pio and fiq_context_init (all of arm_init), vm_mem_bootstrap, machine_init, exception_init (all of kernel_bootstrap), PE_init_iokit, vm_commpage_init (after the console is acquired).
+entry_probe_reset_delay = 6
+entry_probe_reset_after = "_bsd_init"
+entry_probe_reset_in = "_kernel_bootstrap_thread"
 
 [payload.adt]
 # Qualcomm SoC ID of SM8250 (356), read from /sys/devices/soc0/soc_id on the phone (revision 2.1).

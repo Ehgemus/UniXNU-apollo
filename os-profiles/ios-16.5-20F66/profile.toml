@@ -77,9 +77,12 @@ roots = [
 
 [payload]
 text_fixups = []
+# DarwinBoot reads one bundle (count, offsets, version-2 modules), not the IPSW IM4Ps. This is
+# scripts/bundle-ipsw-trust.py over the unchanged StaticTrustCache (096-04088-077.dmg.trustcache,
+# sha256 df0f60fd..., 2759 entries) and Cryptex1,SystemTrustCache (096-04666-078.dmg.trustcache,
+# sha256 501fa23c..., 61 entries), in that order: 67740 bytes.
 trust_cache_sha256 = [
-  "df0f60fd05b7c312ad0fddb5c85d8adf97b487e8500518337bc4cbde3ca73ea7",
-  "501fa23c4620e68e48b91bd2ba8d74251d4fbe37147290650cf717bbef619616",
+  "d29198a360894248df37b1aab9c470596903048c7333c732e7d7a7f251dbbd5c",
 ]
 
 # Identity: the same iPhone X that HakiOS's loader presents by default (xnuloader identity.h).
